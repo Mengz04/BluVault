@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun TextFieldComponent(
-    placeholder: String,
+    label: String,
     text: String,
     onValueChange: (String) -> Unit,
     keyboardOpt: KeyboardOptions = KeyboardOptions.Default,
@@ -31,7 +31,7 @@ fun TextFieldComponent(
         onValueChange = onValueChange,
         label = {
             Text(
-                text = placeholder,
+                text = label,
                 fontFamily = FamilijenGrotesk,
                 fontSize = 16.sp,
                 color = Color.Gray,
@@ -43,14 +43,6 @@ fun TextFieldComponent(
         visualTransformation = visualTrans,
         singleLine = true,
         textStyle = LocalTextStyle.current.copy(color = Color.White, fontSize = 18.sp),
-        placeholder = {
-            Text(
-                text = placeholder,
-                fontFamily = FamilijenGrotesk,
-                color = Color.Gray,
-                fontSize = 16.sp,
-            )
-        },
         colors = TextFieldDefaults.colors(
             focusedTextColor         = Color.White,
             unfocusedTextColor       = Color.White,

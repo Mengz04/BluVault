@@ -70,7 +70,7 @@ fun OTPCodeScreen (navController: NavHostController) {
             horizontalAlignment = Alignment.Start
         ) {
             OutlinedButton(
-                onClick = { navController.navigate("Welcome") },
+                onClick = { navController.navigate("OTPPhone") },
                 modifier = Modifier
                     .height(44.dp)
                     .width(44.dp),
@@ -126,8 +126,8 @@ fun OTPCodeScreen (navController: NavHostController) {
                             }
                             Box(
                                 modifier = Modifier
-                                    .width(56.dp)
-                                    .height(56.dp)
+                                    .width(60.dp)
+                                    .height(60.dp)
                                     .padding(horizontal = 4.dp)
                                     .border(1.dp, Color.LightGray, RoundedCornerShape(8.dp)),
                                 contentAlignment = Alignment.Center

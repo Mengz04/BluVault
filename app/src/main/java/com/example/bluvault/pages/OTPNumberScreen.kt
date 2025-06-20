@@ -108,7 +108,7 @@ fun OTPNumberScreen(navController: NavHostController) {
             Text(
                 text = "Provide your phone number. We will send a confirmation code there.",
                 color = Color(0xFFB0B9C7),
-                fontSize = 14.sp,
+                fontSize = 18.sp,
                 fontFamily = FamilijenGrotesk,
             )
 
@@ -195,7 +195,7 @@ fun OTPNumberScreen(navController: NavHostController) {
                 Text(
                     text = "Already have an account?",
                     color = Color(0xFFB0B9C7),
-                    fontSize = 14.sp,
+                    fontSize = 18.sp,
                     fontFamily = FamilijenGrotesk,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -205,11 +205,11 @@ fun OTPNumberScreen(navController: NavHostController) {
                 Text(
                     text = "Log in",
                     color = Color(0xff418c9d),
-                    fontSize = 14.sp,
+                    fontSize = 18.sp,
                     fontFamily = FamilijenGrotesk,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier
-                        .clickable { navController.navigate("welcome") }
+                        .clickable { navController.navigate("Log In") }
                 )
             }
         }
