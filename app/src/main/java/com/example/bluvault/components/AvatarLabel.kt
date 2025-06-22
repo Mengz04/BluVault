@@ -39,13 +39,13 @@ fun AvatarLabel(
                 .height(48.dp)
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(6.dp))
 
         Text(
             text = label,
             color = Color.Black,
-            fontWeight = FontWeight.Bold,
-            fontSize = 14.sp
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 12.sp
         )
     }
 }

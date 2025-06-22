@@ -1,6 +1,7 @@
 package com.example.bluvault.pages
 
 import FamilijenGrotesk
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -61,12 +62,12 @@ data class EWalletData(
     val backgroundColor: Color
 )
 
+@SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(navController: NavHostController) {
     var selectedIndex by remember { mutableStateOf(0) }
     val scrollState = rememberScrollState()
-    val context = LocalContext.current
 
     val wallets = listOf(
         EWalletData(painterResource(id = R.drawable.gopey), "HoPay", Color(0xFF27AE60)),
@@ -77,195 +78,184 @@ fun DashboardScreen(navController: NavHostController) {
 
     val transfers = listOf("Sarah", "Dhika", "Filza", "Rafi", "Meng")
 
-    Scaffold(
-        bottomBar = {
-            BottomNavBar(
-                selectedIndex = selectedIndex,
-                onItemSelected = { selectedIndex = it }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState)
+            .padding(horizontal = 24.dp, vertical = 24.dp),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.Start
+    ) {
+        // Header
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 12.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.bluvault_dark_icon),
+                contentDescription = "bluVault logo",
+                modifier = Modifier
+                    .width(120.dp)
+                    .height(40.dp)
             )
-        },
-        containerColor = Color.White
-    ) { innerPadding ->
+
+            Image(
+                painter = painterResource(id = R.drawable.default_user),
+                contentDescription = "default user",
+                modifier = Modifier
+                    .width(40.dp)
+                    .height(40.dp)
+            )
+        }
+
+        // Balance
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .verticalScroll(scrollState)
-                .padding(horizontal = 24.dp, vertical = 12.dp),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.Start
+                .fillMaxWidth()
+                .padding(vertical = 16.dp),
         ) {
-            // Header
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 12.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.bluvault_dark_icon),
-                    contentDescription = "bluVault logo",
-                    modifier = Modifier
-                        .width(120.dp)
-                        .height(40.dp)
-                )
+            Text(
+                text = "Total Balance",
+                fontSize = 18.sp,
+                color = Color.Black,
+                fontFamily = FamilijenGrotesk
+            )
 
-                Image(
-                    painter = painterResource(id = R.drawable.default_user),
-                    contentDescription = "default user",
-                    modifier = Modifier
-                        .width(40.dp)
-                        .height(40.dp)
-                )
-            }
+            Spacer(modifier = Modifier.height(4.dp))
 
-            // Balance
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
-            ) {
+            Text(
+                text = "Rp 12.000.000,00",
+                color = Color.Black,
+                fontWeight = FontWeight.Black,
+                fontSize = 38.sp,
+                fontFamily = FamilijenGrotesk
+            )
+        }
+
+        // E-money
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 12.dp),
+            shape = RoundedCornerShape(24.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "Total Balance",
-                    fontSize = 18.sp,
-                    color = Color.Black,
-                    fontFamily = FamilijenGrotesk
+                    text = "E-money",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
                 )
 
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
-                Text(
-                    text = "Rp 12.000.000,00",
-                    color = Color.Black,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 38.sp,
-                    fontFamily = FamilijenGrotesk
-                )
-            }
-
-            // E-money
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 12.dp),
-                shape = RoundedCornerShape(24.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
-            ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        text = "E-money",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(2),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(max = 300.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                        contentPadding = PaddingValues(4.dp)
-                    ) {
-                        items(wallets) { wallet ->
-                            EWalletItem(
-                                icon = wallet.icon,
-                                label = wallet.label,
-                                backgroundColor = wallet.backgroundColor
-                            )
-                        }
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = 300.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(4.dp)
+                ) {
+                    items(wallets) { wallet ->
+                        EWalletItem(
+                            icon = wallet.icon,
+                            label = wallet.label,
+                            backgroundColor = wallet.backgroundColor
+                        )
                     }
                 }
             }
+        }
 
-            // Quick Transfer
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 12.dp),
-                shape = RoundedCornerShape(24.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
-            ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        text = "Quick transfer",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
+        // Quick Transfer
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 12.dp),
+            shape = RoundedCornerShape(24.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    text = "Quick transfer",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
-                    LazyHorizontalGrid(
-                        rows = GridCells.Fixed(1),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(max = 76.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                        contentPadding = PaddingValues(4.dp)
-                    ) {
-                        items(transfers) { transfer ->
-                            AvatarLabel(label = transfer)
-                        }
+                LazyHorizontalGrid(
+                    rows = GridCells.Fixed(1),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = 76.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(4.dp)
+                ) {
+                    items(transfers) { transfer ->
+                        AvatarLabel(label = transfer)
                     }
                 }
             }
+        }
 
-            // Exchange Rate
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 12.dp),
-                shape = RoundedCornerShape(24.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
-            ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column {
-                            Text(
-                                text = "Exchange Rate",
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 16.sp,
-                                color = Color.Black
-                            )
-                            Text(
-                                text = "1 EUR = 1.08315 USD",
-                                fontSize = 13.sp,
-                                color = Color.Gray,
-                                modifier = Modifier.padding(top = 4.dp)
-                            )
-                        }
+        // Exchange Rate
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 12.dp),
+            shape = RoundedCornerShape(24.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text(
+                            text = "Exchange Rate",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp,
+                            color = Color.Black
+                        )
+                        Text(
+                            text = "1 EUR = 1.08315 USD",
+                            fontSize = 13.sp,
+                            color = Color.Gray,
+                            modifier = Modifier.padding(top = 4.dp)
+                        )
                     }
+                }
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
-                    ExchangeRateChart(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(100.dp)
-                    )
+                ExchangeRateChart(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)
+                )
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text("A month ago", fontSize = 12.sp, color = Color.Gray)
-                        Text("Today", fontSize = 12.sp, color = Color.Gray)
-                    }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text("A month ago", fontSize = 12.sp, color = Color.Gray)
+                    Text("Today", fontSize = 12.sp, color = Color.Gray)
                 }
             }
         }
@@ -298,7 +288,6 @@ fun ExchangeRateChart(modifier: Modifier = Modifier) {
             style = Stroke(width = 4f, cap = StrokeCap.Round, join = StrokeJoin.Round)
         )
 
-        // Gradient fill under line (optional)
         path.lineTo(width, height)
         path.lineTo(0f, height)
         path.close()

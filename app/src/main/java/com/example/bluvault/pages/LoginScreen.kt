@@ -146,7 +146,7 @@ fun LoginScreen(navController: NavHostController){
                         password = password,
                         onSuccess = {
                             Toast.makeText(context, "Login success", Toast.LENGTH_SHORT).show()
-                            navController.navigate("Home")
+                            navController.navigate("Dashboard")
                         },
                         onError = {
                             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
