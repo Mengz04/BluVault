@@ -25,7 +25,7 @@ fun BluVaultApp() {
     val navController = rememberNavController()
 
     MainScaffold(navController = navController) {
-        NavHost(navController = navController, startDestination = "TopUp") {
+        NavHost(navController = navController, startDestination = "Login") {
             composable("Welcome") { WelcomeScreen(navController) }
             composable("OTPNumber") { OTPNumberScreen(navController) }
             composable("OTPCode") { OTPCodeScreen(navController) }

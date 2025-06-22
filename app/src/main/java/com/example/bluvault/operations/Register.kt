@@ -5,6 +5,9 @@ import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import com.example.bluvault.operations.addCardToUser
+import com.google.firebase.firestore.FieldValue
+
 
 suspend fun Register(
     context: Context,
@@ -37,13 +40,29 @@ suspend fun Register(
                 "gender" to selectedGender,
                 "username" to username,
                 "email" to email,
-                "phoneNumber" to phoneNumber
+                "phoneNumber" to phoneNumber,
+                "createdAt" to FieldValue.serverTimestamp()
             )
 
             db.collection("users").document(user.uid)
                 .set(userDetails)
                 .addOnSuccessListener {
                     Log.d("RegisterScreen", "User data added to Firestore for UID: ${user.uid}")
+
+                    addCardToUser(
+                        uid = user.uid,
+                        db = db,
+                        cardName = "Main Card",
+                        balance = 0.0,
+                        onSuccess = {
+                            Log.d("RegisterScreen", "Default card created")
+                        },
+                        onError = {
+                            Log.e("RegisterScreen", "Failed to create default card: $it")
+                        }
+                    )
+
+
                     Toast.makeText(context, "Registration successful!", Toast.LENGTH_LONG).show()
                     onLoadingChange(false)
                     navController.navigate("Login") {
