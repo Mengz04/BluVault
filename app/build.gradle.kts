@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.gms.google.services)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -53,6 +54,8 @@ dependencies {
     implementation(libs.androidx.navigation.compose.android)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore.ktx)
+    implementation("com.google.accompanist:accompanist-pager:0.31.3-beta")
+    implementation("androidx.compose.foundation:foundation")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -63,5 +66,11 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.9.0")
     implementation("androidx.activity:activity-compose:1.7.2")
     implementation("androidx.compose.material3:material3:1.2.1")
+    implementation("androidx.camera:camera-camera2:1.3.1")
+    implementation("androidx.camera:camera-lifecycle:1.3.1")
+    implementation("androidx.camera:camera-view:1.3.1")
+    implementation("androidx.camera:camera-core:1.3.1")
+    implementation("com.google.guava:guava:31.1-android")
+
 
 }

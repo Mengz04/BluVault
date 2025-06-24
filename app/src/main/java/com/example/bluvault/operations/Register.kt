@@ -41,7 +41,11 @@ suspend fun Register(
                 "username" to username,
                 "email" to email,
                 "phoneNumber" to phoneNumber,
-                "createdAt" to FieldValue.serverTimestamp()
+                "createdAt" to FieldValue.serverTimestamp(),
+                "hopay_balance" to 0.0,
+                "urlaja_balance" to 0.0,
+                "sopipey_balance" to 0.0,
+                "dono_balance" to 0.0
             )
 
             db.collection("users").document(user.uid)

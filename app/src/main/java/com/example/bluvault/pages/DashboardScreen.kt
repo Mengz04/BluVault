@@ -71,6 +71,7 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontStyle
 import com.example.bluvault.components.BottomNavBar
+import com.example.bluvault.operations.UserSummary
 import com.example.bluvault.operations.fetchTotalCardBalance
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -80,8 +81,10 @@ import kotlin.math.roundToInt
 data class EWalletData(
     val icon: Painter,
     val label: String,
-    val backgroundColor: Color
+    val backgroundColor: Color,
+    val balance: Double? = null
 )
+
 
 @SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -89,10 +92,11 @@ data class EWalletData(
 fun DashboardScreen(navController: NavHostController) {
     var selectedIndex by remember { mutableStateOf(0) }
     val scrollState = rememberScrollState()
-    var recentUsers by remember { mutableStateOf<List<String>>(emptyList()) }
+    var recentUsers by remember { mutableStateOf<List<UserSummary>>(emptyList()) }
     var totalBalance by remember { mutableStateOf<Double?>(null) }
     var isLoadingUsers by remember { mutableStateOf(true) }
     var showMenu by remember { mutableStateOf(false) }
+    var walletBalances by remember { mutableStateOf<Map<String, Double>>(emptyMap()) }
 
 
     val uid = FirebaseAuth.getInstance().currentUser?.uid
@@ -129,14 +133,31 @@ fun DashboardScreen(navController: NavHostController) {
         }
     }
 
+
     val wallets = listOf(
-        EWalletData(painterResource(id = R.drawable.gopey), "HoPay", Color(0xFF27AE60)),
-        EWalletData(painterResource(id = R.drawable.urlaja), "URLaja", Color(0xffff2c2c)),
-        EWalletData(painterResource(id = R.drawable.sopipey), "SopiPey", Color(0xFFEB7C17)),
-        EWalletData(painterResource(id = R.drawable.dono), "Dono", Color(0xFF3EB7DB))
+        EWalletData(painterResource(id = R.drawable.gopey), "HoPay", Color(0xFF27AE60), walletBalances["HoPay"]),
+        EWalletData(painterResource(id = R.drawable.urlaja), "URLaja", Color(0xffff2c2c), walletBalances["URLaja"]),
+        EWalletData(painterResource(id = R.drawable.sopipey), "SopiPey", Color(0xFFEB7C17), walletBalances["SopiPey"]),
+        EWalletData(painterResource(id = R.drawable.dono), "Dono", Color(0xFF3EB7DB), walletBalances["Dono"])
     )
 
-    val transfers = recentUsers
+    LaunchedEffect(uid) {
+        uid?.let {
+            db.collection("users").document(it).get()
+                .addOnSuccessListener { doc ->
+                    val balances = mapOf(
+                        "HoPay" to (doc.getDouble("hopay_balance") ?: 0.0),
+                        "URLaja" to (doc.getDouble("urlaja_balance") ?: 0.0),
+                        "SopiPey" to (doc.getDouble("sopipey_balance") ?: 0.0),
+                        "Dono" to (doc.getDouble("dono_balance") ?: 0.0)
+                    )
+                    walletBalances = balances
+                }
+                .addOnFailureListener {
+                    Toast.makeText(context, "Failed to fetch wallet balances", Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -258,7 +279,7 @@ fun DashboardScreen(navController: NavHostController) {
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "E-money",
+                    text = "E-money Balance",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
@@ -270,7 +291,7 @@ fun DashboardScreen(navController: NavHostController) {
                     columns = GridCells.Fixed(2),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(max = 300.dp),
+                        .heightIn(max = 320.dp), // slightly more height for spacing
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     contentPadding = PaddingValues(4.dp)
@@ -279,12 +300,14 @@ fun DashboardScreen(navController: NavHostController) {
                         EWalletItem(
                             icon = wallet.icon,
                             label = wallet.label,
-                            backgroundColor = wallet.backgroundColor
+                            backgroundColor = wallet.backgroundColor,
+                            balance = wallet.balance // ✅ pass the balance here
                         )
                     }
                 }
             }
         }
+
 
         // Quick Transfer
         Card(
@@ -321,7 +344,7 @@ fun DashboardScreen(navController: NavHostController) {
                         }
                     }
 
-                    transfers.isEmpty() -> {
+                    recentUsers.isEmpty() -> {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -347,8 +370,13 @@ fun DashboardScreen(navController: NavHostController) {
                             verticalArrangement = Arrangement.spacedBy(12.dp),
                             contentPadding = PaddingValues(4.dp)
                         ) {
-                            items(transfers) { transfer ->
-                                AvatarLabel(label = transfer)
+                            items(recentUsers) { user ->
+                                AvatarLabel(
+                                    label = user.username,
+                                    onClick = {
+                                        navController.navigate("transfer?receiverUid=${user.uid}")
+                                    }
+                                )
                             }
                         }
                     }

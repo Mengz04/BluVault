@@ -40,7 +40,7 @@ fun MainScaffold(
                     onItemSelected = { route ->
                         if (route != currentRoute) {
                             navController.navigate(route) {
-                                popUpTo(navController.graph.startDestinationId) { saveState = true }
+                                popUpTo(bottomBarRoutes.first()) { saveState = true }
                                 launchSingleTop = true
                                 restoreState = true
                             }

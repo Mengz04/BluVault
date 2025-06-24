@@ -23,31 +23,42 @@ import com.example.bluvault.R
 fun EWalletItem(
     icon: Painter,
     label: String,
-    backgroundColor: Color
+    backgroundColor: Color,
+    balance: Double? = null
 ) {
-    Row(
+    Card(
         modifier = Modifier
-            .height(48.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(backgroundColor)
-            .padding(horizontal = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+            .fillMaxWidth()
+            .height(80.dp),
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = backgroundColor)
     ) {
-
-        Image(
-            painter = icon,
-            contentDescription = "default user",
+        Column(
             modifier = Modifier
-                .width(25.dp)
-                .height(25.dp)
-        )
+                .fillMaxSize()
+                .padding(12.dp),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = icon,
+                    contentDescription = "$label icon",
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(label, color = Color.White, fontWeight = FontWeight.Bold)
+            }
 
-        Text(
-            text = label,
-            color = Color.White,
-            fontWeight = FontWeight.Bold,
-            fontSize = 14.sp
-        )
+            Text(
+                text = if (balance != null) "$${"%.2f".format(balance)}" else "—",
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp
+            )
+        }
     }
 }
+
