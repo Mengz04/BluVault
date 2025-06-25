@@ -74,7 +74,7 @@ fun WelcomeScreen(navController: NavHostController) {
             contentAlignment = Alignment.BottomCenter
         ) {
             Button(
-                onClick = { navController.navigate("Register") },
+                onClick = { navController.navigate("OTPNumber") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 24.dp)

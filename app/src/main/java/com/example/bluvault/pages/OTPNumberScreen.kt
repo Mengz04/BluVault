@@ -209,7 +209,7 @@ fun OTPNumberScreen(navController: NavHostController) {
                     fontFamily = FamilijenGrotesk,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier
-                        .clickable { navController.navigate("Log In") }
+                        .clickable { navController.navigate("Login") }
                 )
             }
         }
